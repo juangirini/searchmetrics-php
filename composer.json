@@ -16,5 +16,8 @@
         "psr-4": {
             "SearchmetricsPHP\\": "src"
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+
 }
