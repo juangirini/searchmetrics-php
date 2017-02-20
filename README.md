@@ -1,2 +1,2 @@
 # searchmetrics-php
-Searchmetrics API PHP library
+Searchmetrics API PHP library.
