@@ -10,7 +10,7 @@
  * @version v2 2012-03-06
  */
 
-namespace App\Services\SearchmetricsSDK;
+namespace SearchmetricsPHP;
 use ZendOAuth\OAuth as Zend_Oauth;
 use ZendOAuth\Token\Access as Zend_Oauth_Token_Access;
 class SearchmetricsBase

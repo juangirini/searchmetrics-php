@@ -1,7 +1,7 @@
 <?php
 
-// zend configuration
-namespace App\Services\SearchmetricsSDK;
+
+namespace SearchmetricsPHP;
 
 
 /**
