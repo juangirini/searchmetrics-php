@@ -83,8 +83,7 @@ class SearchmetricsBase
 		);
 		$token = new Zend_Oauth_Token_Access();
 
-		$this->http_client = $token->getHttpClient($oauthOptions);
-		$this->http_client->setConfig(array('timeout' => $this->timeout));
+		$this->http_client = $token->getHttpClient($oauthOptions, null, array('timeout' => $this->timeout));
 	}
 
 	/**
