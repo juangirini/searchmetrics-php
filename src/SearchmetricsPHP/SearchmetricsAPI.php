@@ -1,7 +1,7 @@
 <?php
 
 
-namespace SearchmetricsPHP;
+namespace Juangirini\SearchmetricsPHP;
 
 
 /**

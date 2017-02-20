@@ -13,7 +13,7 @@
     },
     "autoload": {
         "psr-4": {
-            "SearchmetricsPHP\\": "src"
+            "Juangirini\\SearchmetricsPHP\\": "src"
         }
     },
     "prefer-stable": true
