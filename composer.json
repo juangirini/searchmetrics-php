@@ -1,0 +1,21 @@
+{
+    "name": "juangirini/searchmetrics-php",
+    "description": "Searchmetrics PHP Toolkit",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Juan Girini",
+            "email": "juangirini@gmail.com"
+        }
+    ],
+    "require": {
+        "zendframework/ZendOAuth": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "OpenSRS\\": "opensrs"
+        }
+    },
+    "minimum-stability" : "dev",
+    "prefer-stable" : true
+}
