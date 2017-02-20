@@ -2,6 +2,7 @@
     "name": "juangirini/searchmetrics-php",
     "description": "Searchmetrics PHP Toolkit",
     "license": "MIT",
+    "version": "1.0.0",
     "authors": [
         {
             "name": "Juan Girini",
