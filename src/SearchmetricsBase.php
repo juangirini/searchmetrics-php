@@ -117,6 +117,7 @@ class SearchmetricsBase
 		$this->http_client->setMethod($method);
 
 		$service_url = $this->buildServiceUrl($service_name);
+		$this->http_client->setUri($service_url);
 
 		if ($method == 'GET') {
 			$this->http_client->setParameterGet($arr_parameter);
@@ -125,17 +126,21 @@ class SearchmetricsBase
 		}
 
 		// execute the request
-		$response = $this->request($service_url, $method);
-		$api_result = $response->getBody();
-		$this->http_status = $response->getStatus();
+		$response = $this->http_client->send();
+
+		$api_result = $response->getContent();
+
+		$content = (preg_split("/\n/",$api_result));
+
+		$this->http_status = $response->getStatusCode();
 
 		// response handling
-		if ($response->getStatus() != 200)
+		if ($this->http_status != 200 || ! array_key_exists(1,$content))
 		{
-			throw new Exception($api_result);
+			return false;
 		}
 
-		return json_decode($api_result, true);
+		return json_decode($content[1], true);
 	}
 
 	/**
@@ -148,7 +153,7 @@ class SearchmetricsBase
 	private function request($url)
 	{
 		$this->http_client->setUri($url);
-		$response = $this->http_client->request();
+		$response = $this->http_client->getRequest();
 
 		return $response;
 	}
