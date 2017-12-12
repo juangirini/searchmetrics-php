@@ -6,6 +6,10 @@
         {
             "name": "Juan Girini",
             "email": "juangirini@gmail.com"
+        },
+		{
+            "name": "Yohann Nizon",
+            "email": "ynizon@gmail.com"
         }
     ],
     "require": {

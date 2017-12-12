@@ -6,20 +6,20 @@
  * @author s.schmidt
  * @author Martin Rothenberger <m.rothenberger@searchmetrics.com>
  * @author Juan Girini <juangirini@gmail.com>
- * @copyright Searchmetrics 2012
- * @version v2 2012-03-06
+ * @author Yohann NIzon <ynizon@gmail.com>
+ * @copyright Searchmetrics 2017
+ * @version v3 2017-12-06
  */
 
 namespace SearchmetricsPHP;
-use ZendOAuth\OAuth as Zend_Oauth;
-use ZendOAuth\Token\Access as Zend_Oauth_Token_Access;
+
 class SearchmetricsBase
 {
 	/**
-	 * @var Zend_Http_Client
+	 * Token
 	 */
-	protected $http_client;
-
+	protected $access_token;
+	
 	/**
 	 * Public API Key for oAuth
 	 * @var string
@@ -66,24 +66,36 @@ class SearchmetricsBase
 		$this->api_key = $api_key;
 		$this->api_secret = $api_secret;
 		$this->timeout = $timeout;
-		$this->initHttpClient();
+		$this->initToken();
 	}
 
 	/**
-	 * Init the OAuth Client
+	 * Init the Token
 	 */
-	private function initHttpClient()
-	{
-		$oauthOptions = array(
-			'requestScheme' => Zend_Oauth::REQUEST_SCHEME_HEADER,
-			'version' => '1.0',
-			'signatureMethod' => "HMAC-SHA1",
-			'consumerKey' => $this->api_key,
-			'consumerSecret' => $this->api_secret
-		);
-		$token = new Zend_Oauth_Token_Access();
+	private function initToken()
+	{		
+		$url =  'http://'.self::SEARCHMETRICS_URL;
+		$url .= $this->getApiVersion();
+		
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,               $url . '/token');
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER,    true);
+		curl_setopt($ch, CURLOPT_HEADER,            false);
+		curl_setopt($ch, CURLOPT_POST,              true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS,        'grant_type=client_credentials');
+		curl_setopt($ch, CURLOPT_USERPWD,           $this->api_key.':'.$this->api_secret);
+		$result = curl_exec($ch);
+		curl_close($ch);
+		 
+		$result = json_decode($result, true);
+		$this->access_token = $result['access_token'];
 
-		$this->http_client = $token->getHttpClient($oauthOptions, null, array('timeout' => $this->timeout));
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,               $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER,    true);
+		curl_setopt($ch, CURLOPT_HEADER,            false);
+		$result = curl_exec($ch);
+		curl_close($ch);
 	}
 
 	/**
@@ -97,8 +109,9 @@ class SearchmetricsBase
 	{
 		$service_url =  'http://'.self::SEARCHMETRICS_URL;
 		$service_url .= $this->getApiVersion().'/';
-		$service_url .= $service_name.'.json';
-
+		$service_url .= $service_name.'.json?';
+		$service_url .= "access_token=".$this->access_token;
+		
 		return $service_url;
 	}
 
@@ -113,50 +126,39 @@ class SearchmetricsBase
 	 */
 	protected function run($service_name, $arr_parameter, $method)
 	{
-		// set the HTTP method
-		$this->http_client->setMethod($method);
+		$ch = curl_init();
 
 		$service_url = $this->buildServiceUrl($service_name);
-		$this->http_client->setUri($service_url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER,    true);
+		curl_setopt($ch, CURLOPT_HEADER,            false);
 
+		$fields_string = "";
+		foreach($arr_parameter as $key=>$value) { 
+			$fields_string .= $key.'='.$value.'&'; 
+		}
+		rtrim($fields_string, '&');
+		
 		if ($method == 'GET') {
-			$this->http_client->setParameterGet($arr_parameter);
-		} else {
-			$this->http_client->setParameterPost($arr_parameter);
+			$service_url .= "&".$fields_string;
+		} else {			
+			curl_setopt($ch,CURLOPT_POST, count($arr_parameter));
+			curl_setopt($ch,CURLOPT_POSTFIELDS, $arr_parameter);
 		}
 
-		// execute the request
-		$response = $this->http_client->send();
-
-		$api_result = $response->getContent();
-
-		$content = (preg_split("/\n/",$api_result));
-
-		$this->http_status = $response->getStatusCode();
-
+		curl_setopt($ch, CURLOPT_URL, $service_url);		
+		$result = curl_exec($ch);
+		$this->http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
+		
 		// response handling
-		if ($this->http_status != 200 || ! array_key_exists(1,$content))
+		if ($this->http_status != 200)
 		{
 			return false;
 		}
 
-		return json_decode($content[1], true);
+		return json_decode($result, true);
 	}
 
-	/**
-	 * Send request to the Searchmetrics API
-	 *
-	 * @param string $url
-	 *
-	 * @return string $url
-	 */
-	private function request($url)
-	{
-		$this->http_client->setUri($url);
-		$response = $this->http_client->getRequest();
-
-		return $response;
-	}
 
 	/**
 	 * Getter API Version

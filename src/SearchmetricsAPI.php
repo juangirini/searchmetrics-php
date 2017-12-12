@@ -9,15 +9,16 @@ namespace SearchmetricsPHP;
  * 
  * @author generated
  * @author Juan Girini <juangirini@gmail.com>
+ * @author Yohann Nizon <ynizon@gmail.com>
  * @copyright Searchmetrics
- * @version 2016-10-11 11:10
+ * @version 2017-12-11 11:10
  */
 class SearchmetricsAPI extends SearchmetricsBase
 {
 	/**
 	 * API Version
 	 */
-	protected $api_version = 'v1';
+	protected $api_version = 'v3';
 
 	/**
 	 * Searchmetrics SEO Worldwide Visibility for a given URL.
@@ -53,6 +54,43 @@ class SearchmetricsAPI extends SearchmetricsBase
 		return $this->run('ResearchOrganicGetListRankingsDomain', get_defined_vars(), 'GET');
 	}
 
+	
+	/**
+	 * Historic rankings for a given keyword in organic search results. (longtail)
+	 *
+	 * @param $countrycode A two letter country code as specified in ISO 3166-1
+	 * @param $keyword 
+	 * @param $limit = "10" Limit for the number of result rows Permitted values are 10, 25, 50, 100, 250 Default is 10
+	 * @param $offset = "0" Offset for result set Must be a multiple of allowed values for the parameter "limit" Default is 0
+	 */
+	public function ResearchOrganicGetListRankingsKeywordLongtail($countrycode, $keyword, $limit = "10", $offset = "0")
+	{
+		return $this->run('ResearchOrganicGetListRankingsKeywordLongtail', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Searchmetrics SEO Visibility per country for a given URL.
+	 *
+	 * @param $url Domain for which the Paid Visibility is queried.
+	 */
+	public function ResearchOrganicGetListSeoVisibilityCountry($url)
+	{
+		return $this->run('ResearchOrganicGetListSeoVisibilityCountry', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Searchmetrics SEO Visibility for Desktop and Mobile for a given URL in a given country in a given timeframe.
+	 *
+	 * @param $countrycode A two letter country code as specified in ISO 3166-1
+	 * @param $date_from Start date from which the Paid Visibility should be queried
+	 * @param $date_to End date up to which the Paid Visibility should be queried
+	 * @param $url Domain for which the Paid Visibility is queried.
+	 */
+	public function ResearchOrganicGetListSeoVisibilityMobileHistory($countrycode, $date_from, $date_to, $url)
+	{
+		return $this->run('ResearchOrganicGetListSeoVisibilityMobileHistory', get_defined_vars(), 'GET');
+	}
+	
 	/**
 	 * Ranking distribution of identified keywords in a given country.
 	 *
@@ -299,6 +337,35 @@ class SearchmetricsAPI extends SearchmetricsBase
 		return $this->run('ResearchPaidGetListPaidVisibilityHistoric', get_defined_vars(), 'GET');
 	}
 
+	/**
+	 * Historic keyword rankings for a given domain in paid search results.
+	 *
+	 * @param $countrycode A two letter country code as specified in ISO 3166-1
+	 * @param $date Date
+	 * @param $url Either a domain or subdomain
+	 * @param $currency = "" Currency code as specified in ISO 4217. Default is "EUR".
+	 * @param $limit = "" Limit for the number of result rows Permitted values are 10, 25, 50, 100, 250 Default is 10
+	 * @param $offset = "" Offset for result set Must be a multiple of allowed values for the parameter "limit" Default is 0
+	 */
+	public function ResearchPaidGetListRankingsDomainHistoric($countrycode, $date, $url)
+	{
+		return $this->run('ResearchPaidGetListRankingsDomainHistoric', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Historic rankings for a given keyword in paid search results.
+	 *
+	 * @param $countrycode A two letter country code as specified in ISO 3166-1
+	 * @param $date Date Format: YYYYMMDD
+	 * @param $keyword Keyword for which the rankings are determined
+	 * @param $limit = "" Limit for the number of result rows Permitted values are 10, 25, 50, 100, 250 Default is 10
+	 * @param $offset = "" Offset for result set Must be a multiple of allowed values for the parameter "limit" Default is 0
+	 */
+	public function ResearchPaidGetListRankingsKeywordHistoric($countrycode, $date, $keyword, $limit = "", $offset = "")
+	{
+		return $this->run('ResearchPaidGetListRankingsKeywordHistoric', get_defined_vars(), 'GET');
+	}
+	
 	/**
 	 * Searchmetrics SEO Visibility for a given URL in a given country in a given timeframe.
 	 *
@@ -677,6 +744,16 @@ class SearchmetricsAPI extends SearchmetricsBase
 	{
 		return $this->run('AdminStatusGetListProjects', get_defined_vars(), 'GET');
 	}
+	
+	/**
+	 * List the project domain and the defined benchmarks for a given project
+	 *
+	 * @param $project_id  (int)
+	 */
+	public function AdminStatusGetListProjectDomainsAndBenchmarks($project_id)
+	{
+		return $this->run('AdminStatusGetListProjectDomainsAndBenchmarks', get_defined_vars(), 'GET');
+	}
 
 	/**
 	 * Paid keywords with advertisements for a given domain
@@ -780,25 +857,6 @@ class SearchmetricsAPI extends SearchmetricsBase
 		return $this->run('ResearchKeywordsGetListWinnersFilter', get_defined_vars(), 'GET');
 	}
 
-	/**
-	 * Site optimization: errors, warnings and notices.
-	 *
-	 * @param $project_id ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.
-	 */
-	public function ProjectOptimizationGetListDomainErrors($project_id)
-	{
-		return $this->run('ProjectOptimizationGetListDomainErrors', get_defined_vars(), 'GET');
-	}
-
-	/**
-	 * Get the current Optimization Domain Score with a trend for the last crawl
-	 *
-	 * @param $project_id ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.
-	 */
-	public function ProjectOptimizationGetValueDomainScore($project_id)
-	{
-		return $this->run('ProjectOptimizationGetValueDomainScore', get_defined_vars(), 'GET');
-	}
 
 	/**
 	 * Get a list of different ad variations
@@ -948,6 +1006,52 @@ class SearchmetricsAPI extends SearchmetricsBase
 	}
 
 	/**
+	 * Keywords with the highest absolute losses in organic search traffic for a given project domain
+	 *
+	 * @param $project_id ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.
+	 * @param $se_id ID of the search engine that should be queried. A complete list of IDs can be found http://api.searchmetrics.com/api-calls/searchengines. Please make sure your project includes the se_id."
+	 * @param $urls DDomains within the project that should be queried. Several domains must be separated with a comma without blank.Please use the exact name that is used within the project. E.g "www.searchmetrics.com" instead of "searchmetrics.com".
+	 * @param $date_from = "" Start date from which the data should be queried Format: YYYYMMDD
+	 * @param $date_to = "" End date to which the data should be queried Format: YYYYMMDD
+	 * @param $limit = "" Number of rows to be queried
+	 * @param $offset = "" Position from where to be returned
+	 */
+	public function ProjectOrganicGetListLosers($project_id, $se_id, $urls, $date_from = "", $date_to = "", $limit = "", $offset = "")
+	{
+		return $this->run('ProjectOrganicGetListLosers', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Keywords with the highest absolute gains in organic search traffic for a given project domain
+	 *
+	 * @param $project_id ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.
+	 * @param $se_id ID of the search engine that should be queried. A complete list of IDs can be found http://api.searchmetrics.com/api-calls/searchengines. Please make sure your project includes the se_id."
+	 * @param $urls DDomains within the project that should be queried. Several domains must be separated with a comma without blank.Please use the exact name that is used within the project. E.g "www.searchmetrics.com" instead of "searchmetrics.com".
+	 * @param $date_from = "" Start date from which the data should be queried Format: YYYYMMDD
+	 * @param $date_to = "" End date to which the data should be queried Format: YYYYMMDD
+	 * @param $limit = "" Number of rows to be queried
+	 * @param $offset = "" Position from where to be returned
+	 */
+	public function ProjectOrganicGetListWinners($project_id, $se_id, $urls, $date_from = "", $date_to = "", $limit = "", $offset = "")
+	{
+		return $this->run('ProjectOrganicGetListWinners', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the Marketshare for a project or for the tags of a project.
+	 *
+	 * @param $project_id ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.
+	 * @param $se_id ID of the search engine that should be queried. A complete list of IDs can be found http://api.searchmetrics.com/api-calls/searchengines. Please make sure your project includes the se_id."
+	 * @param $url Domains (project or benchmark) within the project that should be queried. Several domains must be separated with a comma without blank.Please use the exact name that is used within the project. E.g "www.searchmetrics.com" instead of "searchmetrics.com".Format: string
+	 * @param $tags = "" Comma separated list of tags.
+	 * @param $trend_interval  = "" Set the time range for the trend comparisons. To compare the actual results with the last results use "last". Other possible values are "weekly" (last week; default) and "monthly" (last month).
+	 */
+	public function ProjectOrganicGetValueMarketshare($project_id, $se_id, $url, $tags = "", $trend_interval  = "")
+	{
+		return $this->run('ProjectOrganicGetValueMarketshare', get_defined_vars(), 'GET');
+	}
+	
+	/**
 	 * Get the traffic potentials of your project keywords
 	 *
 	 * @param $project_id ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.
@@ -1089,6 +1193,31 @@ class SearchmetricsAPI extends SearchmetricsBase
 	}
 
 	/**
+	 * Competitors rankings for benchmarks
+	 *
+	 * @param $project_id ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.
+	 * @param $se_id ID of the search engine that should be queried. A complete list of IDs can be found http://api.searchmetrics.com/api-calls/searchengines. Please make sure your project includes the se_id.
+	 * @param $urls Domains within the project that should be queried. Several domains must be separated with a comma without blank. Please use the exact name that is used within the project. E.g "www.searchmetrics.com" instead of "searchmetrics.com".
+	 */
+	public function ProjectOrganicGetListBenchmarkRankings($project_id, $se_id, $urls)
+	{
+		return $this->run('ProjectOrganicGetListBenchmarkRankings', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * CCompetitors rankings for Competitors
+	 *
+	 * @param $project_id ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.
+	 * @param $se_id ID of the search engine that should be queried. A complete list of IDs can be found http://api.searchmetrics.com/api-calls/searchengines. Please make sure your project includes the se_id.
+	 * @param $limit = "" Limit for the number of result rows Permitted values are 10, 25, 50, 100, 250 Default is 10
+	 * @param $offset = "" Offset for result set Must be a multiple of allowed values for the parameter "limit" Default is 0
+	 */
+	public function ProjectOrganicGetListCompetitorRankings($project_id, $se_id, $limit = "", $offset = "")
+	{
+		return $this->run('ProjectOrganicGetListCompetitorRankings', get_defined_vars(), 'GET');
+	}
+	
+	/**
 	 * Keywords device distribution
 	 *
 	 * @param $project_id ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.
@@ -1148,6 +1277,423 @@ class SearchmetricsAPI extends SearchmetricsBase
 		return $this->run('ProjectTrafficUserSignals', get_defined_vars(), 'GET');
 	}
 
+	
+	/**
+	 * Get the list of the top competitors of a given domain.
+	 *
+	 * @param $countrycode (required)	Country code as specified in ISO 3166-1 Format: US, GB, DE etc
+	 * @param $domain (required)	The domain for which the competitors data is requested.Format: domain.tld
+	 * @param $currency (optional)	Currency code as specified in ISO 4217. Default is "EUR".Format: EUR, USD etc.
+	 * @param $limit (optional)	Data limit
+	 * @param $offset (optional)	Data offset
+	 */
+	public function ResearchContentGetListCompetitors($countrycode, $domain, $currency="EUR", $limit="10",$offset="0")
+	{
+		return $this->run('ResearchContentGetListCompetitors', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the list of competitors of a given url
+	 *
+	 * @param $countrycode (required)	Country code as specified in ISO 3166-1 Format: US, GB, DE etc
+	 * @param $url (required)	The url for which the competitors are requested. Format: sub.domain.tld/path/path/file?params
+	 * @param $limit (optional)	Data limit
+	 * @param $offset (optional)	Data offset
+	 */
+	public function ResearchContentGetListCompetitorUrls($countrycode, $url, $limit="10",$offset="0")
+	{
+		return $this->run('ResearchContentGetListCompetitorUrls', get_defined_vars(), 'GET');
+	}
+
+	/**
+	 * Get the list of the loser urls of a given domain.
+	 *
+	 * @param $countrycode (required)	Country code as specified in ISO 3166-1 Format: US, GB, DE etc
+	 * @param $domain (required)	The domain for which the top urls is requested.Format: domain.tld
+	 * @param $keyword_limit (optional)  Number of keywords return with every url. 0 means no keyword return
+	 * @param $limit (optional)	Data limit
+	 * @param $offset (optional)	Data offset
+	 */
+	public function ResearchContentGetListLoserUrls($countrycode, $domain, $keyword_limit="", $limit="",$offset="")
+	{
+		return $this->run('ResearchContentGetListLoserUrls', get_defined_vars(), 'GET');
+	}
+
+	/**
+	 * Get the list of the top urls of a given domain.
+	 *
+	 * @param $countrycode (required)	Country code as specified in ISO 3166-1 Format: US, GB, DE etc
+	 * @param $domain (required)	The domain for which the top urls is requested.Format: domain.tld
+	 * @param $limit (optional)	Data limit
+	 * @param $offset (optional)	Data offset
+	 * @param $sort = (optional) Sort the result. Possible values: (-)traffic_index_value, (-)keyword_count, (-)seo_value, (-)avg_position Format: -traffic_index_total, -keyword_count
+	 */
+	public function ResearchContentGetListTopUrls($countrycode, $domain, $limit="", $offset="",$sort="")
+	{
+		return $this->run('ResearchContentGetListTopUrls', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the list of keywords of a given url
+	 *
+	 * @param $countrycode (required)	Country code as specified in ISO 3166-1 Format: US, GB, DE etc
+	 * @param $url (required)	The url for which the rankings requested.
+	 * @param $limit (optional)	Data limit
+	 * @param $offset (optional)	Data offset
+	 */
+	public function ResearchContentGetListUrlKeywordRankings($countrycode, $url, $limit="",$offset="")
+	{
+		return $this->run('ResearchContentGetListUrlKeywordRankings', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the social spread of a given url
+	 *
+	 * @param $url (required)	The url for which the social spread are requested.
+	 */
+	public function ResearchContentGetListUrlSocialSpread($url)
+	{
+		return $this->run('ResearchContentGetListUrlSocialSpread', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the list of the winner urls of a given domain.
+	 *
+	 * @param $countrycode (required)	Country code as specified in ISO 3166-1 Format: US, GB, DE etc
+	 * @param $domain (required)	The domain for which the top urls is requested.Format: domain.tld
+	 * @param $keyword_limit (optional)  Number of keywords return with every url. 0 means no keyword return
+	 * @param $limit (optional)	Data limit
+	 * @param $offset (optional)	Data offset
+	 */
+	public function ResearchContentGetListWinnerUrls($countrycode, $domain, $keyword_limit="", $limit="",$offset="")
+	{
+		return $this->run('ResearchContentGetListWinnerUrls', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the number of competitor urls of a given domain.
+	 *
+	 * @param $countrycode (required)	Country code as specified in ISO 3166-1 Format: US, GB, DE etc
+	 * @param $domain (required)	The domain for which the top urls is requested.Format: domain.tld	 
+	 */
+	public function ResearchContentGetValueCompetitorUrlCount($countrycode, $domain)
+	{
+		return $this->run('ResearchContentGetValueCompetitorUrlCount', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the SEO value and the SEO value potential of a given domain.
+	 *
+	 * @param $countrycode (required)	Country code as specified in ISO 3166-1 Format: US, GB, DE etc
+	 * @param $currency (optional)	Which currency should have the returned value. default EUR
+	 * @param $domain (optional)	The domain for which the top urls is requested.Format: domain.tld	 
+	 * @param $url (optional)	The url for which the seo values is requested.
+	 */
+	public function ResearchContentGetValueSeoValue($countrycode, $currency="EUR", $domain= "",$url="")
+	{
+		return $this->run('ResearchContentGetValueSeoValue', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the value of traffic index and traffic index potential of a given domain.
+	 *
+	 * @param $countrycode (required)	Country code as specified in ISO 3166-1 Format: US, GB, DE etc
+	 * @param $domain (required)	The domain for which the traffic index is requested.	 
+	 */
+	public function ResearchContentGetValueTrafficIndex($countrycode, $domain= "")
+	{
+		return $this->run('ResearchContentGetValueTrafficIndex', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the number of backlinks of a given url.
+	 *
+	 * @param $countrycode (required)	Country code as specified in ISO 3166-1 Format: US, GB, DE etc
+	 * @param $url (required)	The url for which the backlinks count is requested.
+	 */
+	public function ResearchContentGetValueUrlBacklinks($countrycode, $url)
+	{
+		return $this->run('ResearchContentGetValueUrlBacklinks', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the number of urls of a given domain.
+	 *
+	 * @param $countrycode (required)	Country code as specified in ISO 3166-1 Format: US, GB, DE etc
+	 * @param $domain (required)	The domain for which the number of urls is requested.
+	 */
+	public function ResearchContentGetValueUrlCount($countrycode, $domain)
+	{
+		return $this->run('ResearchContentGetValueUrlCount', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the value of the traffic index of the given url and the whole domain.
+	 *
+	 * @param $countrycode (required)	Country code as specified in ISO 3166-1 Format: US, GB, DE etc
+	 * @param $url (required)	The url for which the traffic index is requested.
+	 */
+	public function ResearchContentGetValueUrlDomainTraffic($countrycode, $url)
+	{
+		return $this->run('ResearchContentGetValueUrlDomainTraffic', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the number of keywords of a given url and the average of the top 10 competitors.
+	 *
+	 * @param $countrycode (required)	Country code as specified in ISO 3166-1 Format: US, GB, DE etc
+	 * @param $url (required)	The url for which the keyword count is requested.
+	 */
+	public function ResearchContentGetValueUrlKeywordCount($countrycode, $url)
+	{
+		return $this->run('ResearchContentGetValueUrlKeywordCount', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the number of referred domains of a given url.
+	 *
+	 * @param $countrycode (required)	Country code as specified in ISO 3166-1 Format: US, GB, DE etc
+	 * @param $url (required)	The url for which the referred domains count is requested.
+	 */
+	public function ResearchContentGetValueUrlReferredDomains($countrycode, $url)
+	{
+		return $this->run('ResearchContentGetValueUrlReferredDomains', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the social visibility of a given url.
+	 *
+	 * @param $countrycode (required)	Country code as specified in ISO 3166-1 Format: US, GB, DE etc
+	 * @param $url (required)	The url for which the social visibility is requested.
+	 */
+	public function ResearchContentGetValueUrlSocialVisibility($countrycode, $url)
+	{
+		return $this->run('ResearchContentGetValueUrlSocialVisibility', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the value of the traffic index of a given domain and the top 10 competitors.
+	 *
+	 * @param $countrycode (required)	Country code as specified in ISO 3166-1 Format: US, GB, DE etc
+	 * @param $url (required)	The url for which the traffic index is requested.
+	 */
+	public function ResearchContentGetValueUrlTraffic($countrycode, $url)
+	{
+		return $this->run('ResearchContentGetValueUrlTraffic', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the number of winner and loser urls of a given domain.
+	 *
+	 * @param $countrycode (required)	Country code as specified in ISO 3166-1 Format: US, GB, DE etc
+	 * @param $domain (required) The domain for which the count of winner and loser is requested.
+	 */
+	public function ResearchContentGetValueUrlWinnerLoserCount($countrycode, $domain)
+	{
+		return $this->run('ResearchContentGetValueUrlWinnerLoserCount', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Retrieve data for a content opt crawl
+	 *
+	 * @param $crawl_id  (required)	Id of the crawl you want to get
+	 * @param $project_id  (required) D of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.
+	 * @param $limit = "" Limit for the number of result rows Permitted values are 10, 25, 50, 100, 250 Default is 10
+	 * @param $offset = "" Offset for result set Must be a multiple of allowed values for the parameter "limit" Default is 0
+	 * @param $show = "" Witch information to retrieve
+	 * @param $sort = "" 
+	 * @param $type = Type of Keywords
+	 */
+	public function ProjectOptimizationGetListContentDetail($crawl_id, $project_id, $limit = "", $offset = "", $show = "",$sort = "", $type="")
+	{
+		return $this->run('ProjectOptimizationGetListContentDetail', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * List of available content opt crawls
+	 *
+	 * @param $project_id  (required) ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.
+	 */
+	public function ProjectOptimizationGetListContentOverview($project_id)
+	{
+		return $this->run('ProjectOptimizationGetListContentOverview', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Status of a content opt crawl
+	 *
+	 * @param $crawl_id  (required)	Id of the crawl you want to get
+	 * @param $project_id  (required) ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.	 
+	 */
+	public function ProjectOptimizationGetListContentStatus($crawl_id, $project_id)
+	{
+		return $this->run('ProjectOptimizationGetListContentStatus', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Site optimization: errors, warnings and notices.
+	 *
+	 * @param $project_id  (required) ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.
+	 */
+	public function ProjectOptimizationGetListDomainErrors($project_id)
+	{
+		return $this->run('ProjectOptimizationGetListDomainErrors', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Site optimization: errors, warnings and notices.
+	 *
+	 * @param $project_id  (required) ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.
+	 */
+	public function ProjectOptimizationGetListDomainErrorsCount($project_id)
+	{
+		return $this->run('ProjectOptimizationGetListDomainErrorsCount', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Listing of the keyword optimization URLs
+	 *
+	 * @param $project_id  (required) ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.
+	 * @param $date (optional) Date for which the keywords are queried
+	 * @param $limit (optional) Limit for the number of result rows Permitted values are 10, 25, 50, 100, 250 Default is 10
+	 * @param $offset (optional) Offset for result set Must be a multiple of allowed values for the parameter "limit" Default is 0
+	 */
+	public function ProjectOptimizationGetListKeywordUrls($project_id, $date, $limit, $offset)
+	{
+		return $this->run('ProjectOptimizationGetListKeywordUrls', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the current url condition with a trend for the last crawl
+	 *
+	 * @param $project_id  (required) ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.
+	 */
+	public function ProjectOptimizationGetListUrlCondition($project_id)
+	{
+		return $this->run('ProjectOptimizationGetListUrlCondition', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the current Optimization Domain Score with a trend for the last crawl
+	 *
+	 * @param $project_id  (required) ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.
+	 */
+	public function ProjectOptimizationGetValueDomainScore($project_id)
+	{
+		return $this->run('ProjectOptimizationGetValueDomainScore', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Request a content opt crawl
+	 *
+	 * @param $keyword Please enter the keyword for the content, you want to check.
+	 * @param $project_id ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.
+	 * @param $se_id ID of the search engine that should be queried. A complete list of IDs can be found http://api.searchmetrics.com/api-calls/searchengines. Please make sure your project includes the se_id."
+	 * @param $additional_keywords Define 5 more keywords for the topic of the content.
+	 * @param $name  = ""  Name for the crawl. If not set, the queried keyword is used
+	 * @param $text = ""  If you have no url, please insert the content to check.
+	 * @param $url = ""  Please enter the url of your content.
+	 */
+	public function ProjectOptimizationPostValueContentRequest($keyword,$project_id, $se_id, $additional_keywords = "", $name="",$text="",$url="" )
+	{
+		return $this->run('ProjectOptimizationPostValueContentRequest', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Average position of the created project keywords in the organic search results
+	 *
+	 * @param $project_id ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.
+	 * @param $se_id ID of the search engine that should be queried. A complete list of IDs can be found http://api.searchmetrics.com/api-calls/searchengines. Please make sure your project includes the se_id."
+	 * @param $url  Domains within the project that should be queried. Several domains must be separated with a comma without blank. Please use the exact name that is used within the project. E.g "www.searchmetrics.com" instead of "searchmetrics.com". Format: domain1.tld,domain2.tld
+	 * @param $date = ""  Date for which the average position are queried Format: YYYYMMDD
+	 */
+	public function ProjectRankingsGetValueStatistic($project_id, $se_id, $url,$date="" )
+	{
+		return $this->run('ProjectRankingsGetValueStatistic', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Returns a list of the SSO Crawls associated with a specific project. This call returns all relevant setup information about the site structure crawls that are available for the specified project (e.g. amount of pages crawled, excluded parameters etc.).
+	 *
+	 * @param $project_id  (required) ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.
+	 * @param $limit (optional) Limit for the number of result rows Permitted values are 10, 25, 50, 100, 250 Default is 10
+	 * @param $offset (optional) Offset for result set Must be a multiple of allowed values for the parameter "limit" Default is 0
+	 */
+	public function ProjectDeepAuditGetListCrawlInfos($project_id,$limit, $offset)
+	{
+		return $this->run('ProjectDeepAuditGetListCrawlInfos', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the current Site Structure Optimization Domain Score, Error and Warning with a trend for the last crawl. Domain Score is calculated using the number of identified errors, warnings and suggestions according to the number of analyzed pages. The higher the Domain Score, the better a site is optimized.
+	 *
+	 * @param $crawl_id (required)
+	 * @param $project_id  (required) ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.	 
+	 */
+	public function ProjectDeepAuditGetListCrawlResults($crawl_id,$project_id)
+	{
+		return $this->run('ProjectDeepAuditGetListCrawlResults', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * This call returns a list of all identified errors, warnings and notices. The field [potential] indicates the amount that each error influences your Domain Score. Special attention should be given to errors with greater potential. Trending results are also critical � are there any errors, warnings or notices that have increased a lot since the last crawl? If so, take a closer look and dig deeper by checking the URLs.
+	 *
+	 * @param $crawl_id (required)
+	 * @param $project_id  (required) ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.	 
+	 */
+	public function ProjectDeepAuditGetListCrawlResultsDetails($crawl_id,$project_id)
+	{
+		return $this->run('ProjectDeepAuditGetListCrawlResultsDetails', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Delete a url
+	 *
+	 * @param $id (required) ID of the url to delete
+	 * @param $project_id  (required) ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.	 
+	 */
+	public function ProjectSocialDeleteUrl($id,$project_id)
+	{
+		return $this->run('ProjectSocialDeleteUrl', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * List urls for a given project
+	 *
+	 * @param $project_id  (required) ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.	 
+	 * @param $limit (optional) Limit for the number of result rows Permitted values are 10, 25, 50, 100, 250 Default is 10
+	 * @param $offset (optional) Offset for result set Must be a multiple of allowed values for the parameter "limit" Default is 0
+	 */
+	public function ProjectSocialGetListUrls($project_id,$limit, $offset)
+	{
+		return $this->run('ProjectSocialGetListUrls', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the visbility for all observed urls for a given project
+	 *
+	 * @param $end_ts (required) End time (int)
+	 * @param $project_id  (required) ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.	 
+	 * @param $start_ts (required) Start time (int)
+	 * @param $limit (optional) Limit for the number of result rows Permitted values are 10, 25, 50, 100, 250 Default is 10
+	 * @param $offset (optional) Offset for result set Must be a multiple of allowed values for the parameter "limit" Default is 0
+	 * @param $sort (optional) Sort by which value. Possible values: svi_trend, -svi_trend, svi, -svi, fb.to, -fb.to, gp.to, -gp.to, tw.to, -tw.to Default value: -svi_trend
+	 */
+	public function ProjectSocialGetListVisibilityUrls($end_ts ,$project_id,$start_ts, $limit, $offset, $sort)
+	{
+		return $this->run('ProjectSocialGetListVisibilityUrls', get_defined_vars(), 'GET');
+	}
+	
+	/**
+	 * Get the visbility for all observed urls for a given project
+	 *
+	 * @param $project_id  (required) ID of the project that should be queried. The ID can be found in the URL when viewing the project in the Searchmetrics Suite.	 
+	 * @param $urls (required) Urls of the given project, several urls must be separated with a comma without blank.
+	 */
+	public function ProjectSocialPostAddUrls($project_id,$urls)
+	{
+		return $this->run('ProjectSocialPostAddUrls', get_defined_vars(), 'GET');
+	}
 
 }
 
