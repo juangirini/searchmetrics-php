@@ -156,7 +156,8 @@ class SearchmetricsBase
 			return false;
 		}
 
-		return json_decode($result, true);
+		$r = json_decode($result, true);
+		return $r["response"];
 	}
 
 
