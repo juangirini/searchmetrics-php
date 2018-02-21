@@ -157,7 +157,12 @@ class SearchmetricsBase
 		}
 
 		$r = json_decode($result, true);
-		return $r["response"];
+		if (isset($r["response"])){
+			return $r["response"];	
+		}else{
+			return $r;
+		}
+		
 	}
 
 
